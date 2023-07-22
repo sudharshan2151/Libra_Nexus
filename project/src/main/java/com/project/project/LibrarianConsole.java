@@ -1,17 +1,21 @@
 package com.project.project;
-
+import java.util.List;
 import java.util.Scanner;
-
 import com.project.entity.Availability;
 import com.project.entity.Book;
+import com.project.entity.Feedback;
 import com.project.entity.Librarian;
-import com.project.entity.Student;
+import com.project.entity.Rental;
 import com.project.exception.NoRecordFoundException;
 import com.project.exception.SomethingWentWrongException;
 import com.project.service.BookService;
 import com.project.service.BookServiceImpl;
+import com.project.service.FeedbackService;
+import com.project.service.FeedbackServiceImpl;
 import com.project.service.LibrarianService;
 import com.project.service.LibrarianServiceImpl;
+import com.project.service.RentalService;
+import com.project.service.RentalServiceImpl;
 import com.project.service.StudentService;
 import com.project.service.StudentServiceImpl;
 
@@ -19,14 +23,14 @@ public class LibrarianConsole {
 	
 	    private  static BookService bookService = new BookServiceImpl();
 	    private static StudentService studentService = new StudentServiceImpl();
+	    private static RentalService rental = new RentalServiceImpl();
+	    private static FeedbackService feedback = new FeedbackServiceImpl();
 	    private static  Scanner scanner = new Scanner(System.in);
 
-	   
-
-	    public static void run() {
+	    public static void run(Librarian k ) {
 	    	boolean running = true;
 	        while (running) {
-	            System.out.println("Welcome, Librarian!");
+	            System.out.println("Welcome, Librarian!"+k.getName());
 	            System.out.println("1. Add new book");
 	            System.out.println("2. Update book information");
 	            System.out.println("3. Remove book");
@@ -124,7 +128,7 @@ public class LibrarianConsole {
 				bookService.updateBook(book);
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 
 	        System.out.println("Book information updated successfully.");
@@ -154,18 +158,32 @@ public class LibrarianConsole {
 
 	    private static void viewStudentRentals() {
 //	        System.out.println("Student Rentals:");
-//	        List<Rental> studentRentals = studentService.getAllRentals();
-//	        for (Rental rental : studentRentals) {
-//	            System.out.println(rental);
-//	        }
+	        List<Rental> studentRentals;
+			try {
+				studentRentals = rental.getAllRentals();
+				for (Rental rental : studentRentals) {
+		            System.out.println(rental);
+		        }
+			} catch (SomethingWentWrongException e) {
+				// TODO Auto-generated catch block
+				System.out.println(e.getMessage());
+			}
+	        
 	    }
 
 	    private static void viewFeedbackAndRatings() {
 //	        System.out.println("Feedback and Ratings:");
-//	        List<Feedback> feedbacks = studentService.getAllFeedbacks();
-//	        for (Feedback feedback : feedbacks) {
-//	            System.out.println(feedback);
-//	        }
+	        List<Feedback> feedbacks;
+			try {
+				feedbacks = feedback.getAllFeedbacks();
+				for (Feedback feedback : feedbacks) {
+		            System.out.println(feedback);
+		        }
+			} catch (SomethingWentWrongException e) {
+				// TODO Auto-generated catch block
+				System.out.println(e.getMessage());
+			}
+	        
 	    }
 
 	    public static void main(String[] args) {
@@ -198,10 +216,7 @@ public class LibrarianConsole {
 	                    System.out.println("Invalid choice. Please try again.");
 	            }
 	        }
-	        // Create instances of the services using the DAO implementation
-
-	        // Run the application
-	      //run();
+	        
 	    }
 
 		private static void loginStudent() {
@@ -216,9 +231,10 @@ public class LibrarianConsole {
 	        
 	        LibrarianService ser = new LibrarianServiceImpl();
 	        try {
-				Student k = ser.(email, password);
+				Librarian k = ser.loginStudent(email, password);
 				//System.out.println(k);
-				//mainSub(k);
+				//System.out.println("Login");
+				run(k);
 			} catch (NoRecordFoundException | SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
 				System.out.println(e.getMessage());
@@ -228,7 +244,7 @@ public class LibrarianConsole {
 		private static void registerStudent() {
 			// TODO Auto-generated method stub
 			Scanner scanner = new Scanner(System.in);
-	        System.out.println("Register for a student account");
+	        System.out.println("Register for a Libranian account");
 	        System.out.print("Enter your name: ");
 	        String name = scanner.nextLine();
 
@@ -245,14 +261,8 @@ public class LibrarianConsole {
 				System.out.println("Registered SucessfullY==================");
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 		}
-		
-		
-		
-
-		
-	
 
 }

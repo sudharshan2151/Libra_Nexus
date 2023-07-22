@@ -39,16 +39,15 @@ public class Book {
         this.availability = available ? Availability.AVAILABLE : Availability.NOT_AVAILABLE;
     }
 
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", genre='" + genre + '\'' +
-                ", availability=" + availability +
-                '}';
-    }
+   
+
+	
+
+	@Override
+	public String toString() {
+		return String.format("Book [id=%s, title=%s, author=%s, genre=%s, availability=%s]", id, title, author, genre,
+				availability);
+	}
 
 	public int getId() {
 		return id;

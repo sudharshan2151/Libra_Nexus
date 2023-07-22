@@ -3,6 +3,7 @@ package com.project.service;
 import java.util.List;
 
 import com.project.entity.Librarian;
+import com.project.exception.NoRecordFoundException;
 import com.project.exception.SomethingWentWrongException;
 
 public interface LibrarianService {
@@ -12,5 +13,5 @@ public interface LibrarianService {
     void removeLibrarian(Librarian librarian) throws SomethingWentWrongException ;
     Librarian getLibrarianById(int librarianId) throws SomethingWentWrongException ;
     List<Librarian> getAllLibrarians()  throws SomethingWentWrongException ;
-
+    public Librarian loginStudent(String email, String password) throws NoRecordFoundException, SomethingWentWrongException;
 }

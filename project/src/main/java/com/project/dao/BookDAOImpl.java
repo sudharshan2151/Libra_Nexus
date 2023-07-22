@@ -3,6 +3,7 @@ package com.project.dao;
 
 import java.util.List;
 
+import com.project.entity.Availability;
 import com.project.entity.Book;
 import com.project.exception.NoRecordFoundException;
 import com.project.exception.SomethingWentWrongException;
@@ -10,6 +11,7 @@ import com.project.utility.DbUtil;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
 public class BookDAOImpl implements BookDAO {
@@ -29,7 +31,7 @@ public class BookDAOImpl implements BookDAO {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            throw new SomethingWentWrongException("NO books is available");
+            throw new SomethingWentWrongException(e.getMessage());
         } finally {
             entityManager.close();
         }
@@ -108,13 +110,16 @@ public class BookDAOImpl implements BookDAO {
         }
     }
 
+	//@SuppressWarnings("unchecked")
+	//@SuppressWarnings("unchecked")
 	@Override
 	public List<Book> getAllBooks() throws SomethingWentWrongException {
 		// TODO Auto-generated method stub
 		EntityManager entityManager = DbUtil.getConnection();
 		 try {
-	            TypedQuery<Book> query = entityManager.createQuery("SELECT b FROM Book b", Book.class);
+	           Query query = entityManager.createNativeQuery("SELECT * FROM BOOKS",Book.class);
 	            List<Book> k = query.getResultList();
+	            System.out.println(k);
 	            if(k==null) {
 	            	throw new NoRecordFoundException("NO books is available");
 	            }
@@ -127,14 +132,16 @@ public class BookDAOImpl implements BookDAO {
 	        }
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Book> getAvailableBooks() throws SomethingWentWrongException, NoRecordFoundException {
 		// TODO Auto-generated method stub
 		EntityManager entityManager = DbUtil.getConnection();
         try {
-            TypedQuery<Book> query = entityManager.createQuery("SELECT b FROM Book b WHERE b.availability = :availability", Book.class);
-            query.setParameter("availability","Book.Availability.AVAILABLE");
+        	Query query = entityManager.createQuery("SELECT b FROM Book b WHERE b.availability = :availability", Book.class);
+            query.setParameter("availability",Availability.AVAILABLE);
             List<Book> k = query.getResultList();
+            System.out.println(k);
             if(k==null) {
             	throw new NoRecordFoundException("NO books is available");
             }

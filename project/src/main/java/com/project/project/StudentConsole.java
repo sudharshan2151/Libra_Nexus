@@ -1,14 +1,28 @@
 package com.project.project;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
+import com.project.entity.Availability;
+import com.project.entity.Book;
+import com.project.entity.Rental;
+import com.project.entity.ReturnStatus;
 import com.project.entity.Student;
 import com.project.exception.NoRecordFoundException;
 import com.project.exception.SomethingWentWrongException;
 import com.project.service.BookService;
 import com.project.service.BookServiceImpl;
+import com.project.service.RentalService;
+import com.project.service.RentalServiceImpl;
 import com.project.service.StudentService;
 import com.project.service.StudentServiceImpl;
+import com.project.utility.DbUtil;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 public class StudentConsole {
     
@@ -24,7 +38,7 @@ public class StudentConsole {
 	        StudentService ser = new StudentServiceImpl();
 	        try {
 				Student k = ser.loginStudent(email, password);
-				//System.out.println(k);
+				System.out.println("Loggedin Sucessfully===========>");
 				mainSub(k);
 			} catch (NoRecordFoundException | SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
@@ -45,10 +59,11 @@ public class StudentConsole {
 	        System.out.println("2. Apply filters and sorting options to search and browse books");
 	        System.out.println("3. Rent a book");
 	        System.out.println("4. Return a rented book");
-	        System.out.println("5. Provide feedback and ratings on");
-	        System.out.println("6. View available books");
-	        System.out.println("7. Delete the account");
-	        System.out.println("8. Change the Password");
+	        System.out.println("5. View all rented book");
+	        System.out.println("6. Provide feedback and ratings on");
+	        System.out.println("7. View available books");
+	        System.out.println("8. Delete the account");
+	        System.out.println("9. Change the Password");
 	        System.out.println("0. Exit");
     		choice = Integer.parseInt(br.nextLine());
 	        
@@ -64,7 +79,7 @@ public class StudentConsole {
                 // Add new books to the library system
                 // Read necessary information from the user
                 // Create a new Book object and call bookService.addBook() to add to the system
-            	
+            	rent(stu,br);
                 break;
             case 4:
                 // Update book information
@@ -77,13 +92,18 @@ public class StudentConsole {
                 // Remove books from the system
                 // Read book ID from the user
                 // Call bookService.removeBook() to remove the book from the system
+            	break;
             case 6:
-            	availble();
+            	
             	break;
             case 7:
-            	deleteAccount(br);
+            	availble();
             	break;
             case 8:
+            	deleteAccount(br);
+            	choice=0;
+            	break;
+            case 9:
             	changePassword(br);
             case 0:
             	choice = 0;
@@ -97,7 +117,59 @@ public class StudentConsole {
     	}
 
 	
-	 private static void changePassword(Scanner scanner) {
+	 private static void rent(Student stu,Scanner br) {
+		// TODO Auto-generated method stub
+		// Get book ID from the student
+	        // ...
+		 
+		 System.out.println("Enter the BookId");
+		 int bookId = Integer.parseInt(br.nextLine());
+
+	        // Retrieve the book from the database
+		 	BookService bookService = new BookServiceImpl();
+	        Book book=null;
+			try {
+				book = bookService.getBookById(bookId);
+			} catch (SomethingWentWrongException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        if (book == null || book.getAvailability() != Availability.AVAILABLE) {
+	            System.out.println("Book not available for rent.");
+	            return;
+	        }
+
+	        // Create a new rental object
+	        Rental rental = new Rental();
+	        rental.setStudent(stu);
+	        rental.setBook(book);
+	        rental.setRentalDate(new Date());
+	        rental.setReturnStatus(ReturnStatus.NOT_RETURNED);
+
+	        // Add the rental to the database
+	        RentalService rentalService = new RentalServiceImpl();
+	        
+	        try {
+				rentalService.addRental(rental);
+			} catch (SomethingWentWrongException e) {
+				// TODO Auto-generated catch block
+				System.out.println(e.getMessage());
+			}
+
+	        // Update the book availability to "RENTED"
+	        book.setAvailability(Availability.NOT_AVAILABLE);
+	        try {
+				bookService.updateBook(book);
+			} catch (SomethingWentWrongException e) {
+				// TODO Auto-generated catch block
+				System.out.println(e.getMessage());
+			}
+
+	        System.out.println("Book rented successfully.");
+		
+	}
+
+	private static void changePassword(Scanner scanner) {
 		// TODO Auto-generated method stub
 		 System.out.println("Log in to the student account");
 	        System.out.print("Enter your email: ");
@@ -231,7 +303,7 @@ public class StudentConsole {
 		String name = br.nextLine();
 		BookService k = new BookServiceImpl();
 		 try {
-			k.searchBooksByTitle(name).forEach(System.out::println);;
+			k.searchBooksByTitle(name).forEach(System.out::println);
 		} catch (SomethingWentWrongException | NoRecordFoundException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
@@ -242,8 +314,11 @@ public class StudentConsole {
 		// TODO Auto-generated method stub
 		 BookService k = new BookServiceImpl();
 		 try {
-			k.getAvailableBooks().forEach(System.out::println);;
-		} catch (SomethingWentWrongException | NoRecordFoundException e) {
+			 List<Book> k1 = k.getAllBooks();
+			 for (Book book : k1) {
+				System.out.println(book.toString());
+			}
+		} catch (SomethingWentWrongException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
 		}
@@ -253,6 +328,21 @@ public class StudentConsole {
 	public static void main(String[] args) {
 		 Scanner scanner = new Scanner(System.in);
 	        boolean running = true;
+	        EntityManager entityManager = DbUtil.getConnection();
+			 try {
+				 CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		            CriteriaQuery<Book> query = criteriaBuilder.createQuery(Book.class);
+		            Root<Book> root = query.from(Book.class);
+		           query.select(root);
+
+		             entityManager.createQuery(query).getResultList().forEach(System.out::println);;
+		            
+		        }catch(Exception e) { 
+		        	//throw new SomethingWentWrongException("NO books is available");
+		        }finally {
+		 
+		            entityManager.close();
+		        }
 	        while (running) {
 	            System.out.println("Welcome to the Library Management System!");
 	            System.out.println("1. Register for a student account");
@@ -305,9 +395,6 @@ public class StudentConsole {
 	   
 	}
 	
-        // Implement the console-based application for the student
-        // You can use the scanner to take input from the user and interact with the service and DAO
-
-      
+    
 
 

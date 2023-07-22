@@ -26,12 +26,15 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getBookById(int bookId) throws SomethingWentWrongException {
+    	
         return bookDAO.getBookById(bookId);
     }
 
     @Override
     public List<Book> getAllBooks() throws SomethingWentWrongException {
-        return bookDAO.getAllBooks();
+    	BookDAO k = new BookDAOImpl();
+    	List<Book> k1 = k.getAllBooks();
+        return k1;
     }
 
     @Override

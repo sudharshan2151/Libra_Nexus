@@ -4,6 +4,8 @@ import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,6 +38,14 @@ public class Rental {
 		this.returnDate = returnDate;
 	}
 
+	public ReturnStatus getReturnStatus() {
+		return returnStatus;
+	}
+
+	public void setReturnStatus(ReturnStatus returnStatus) {
+		this.returnStatus = returnStatus;
+	}
+
 	@ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
@@ -43,6 +53,8 @@ public class Rental {
     @Column(name = "rental_date", nullable = false)
     private Date rentalDate;
 
+    @Enumerated(EnumType.STRING)
+    private ReturnStatus returnStatus;
     public int getId() {
 		return id;
 	}
@@ -86,19 +98,12 @@ public class Rental {
 	@Column(name = "return_date")
     private Date returnDate;
 
-    // Other attributes, constructors, getters/setters
-
-    // Constructors, getters, and setters as before
+    
 
     @Override
-    public String toString() {
-        return "Rental{" +
-                "id=" + id +
-                ", student=" + student +
-                ", book=" + book +
-                ", rentalDate=" + rentalDate +
-                ", returnDate=" + returnDate +
-                '}';
-    }
+	public String toString() {
+		return "Rental [id=" + id + ", student=" + student + ", book=" + book + ", rentalDate=" + rentalDate
+				+ ", returnStatus=" + returnStatus + ", returnDate=" + returnDate + "]";
+	}
 }
  
