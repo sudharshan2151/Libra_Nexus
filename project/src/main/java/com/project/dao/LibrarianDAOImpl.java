@@ -3,6 +3,7 @@ package com.project.dao;
 import java.util.List;
 
 import com.project.entity.Librarian;
+import com.project.exception.NoRecordFoundException;
 import com.project.exception.SomethingWentWrongException;
 import com.project.utility.DbUtil;
 
@@ -27,7 +28,7 @@ public class LibrarianDAOImpl implements LibrarianDAO{
 	    }
 
 	    @Override
-	    public void updateLibrarian(Librarian librarian) {
+	    public void updateLibrarian(Librarian librarian) throws SomethingWentWrongException {
 	    	 EntityManager entityManager = DbUtil.getConnection();
 	        try {
 	            entityManager.getTransaction().begin();
@@ -35,7 +36,7 @@ public class LibrarianDAOImpl implements LibrarianDAO{
 	            entityManager.getTransaction().commit();
 	        } catch (Exception ex) {
 	            entityManager.getTransaction().rollback();
-	            throw new SomethingWentWrongException(("Failed to update librarian."+ ex);
+	            throw new SomethingWentWrongException("Failed to update librarian."+ ex);
 	        } finally {
 	            entityManager.close();
 	        }
@@ -61,7 +62,11 @@ public class LibrarianDAOImpl implements LibrarianDAO{
 	    public Librarian getLibrarianById(int librarianId) throws SomethingWentWrongException {
 	    	 EntityManager entityManager = DbUtil.getConnection();
 	        try {
-	            return entityManager.find(Librarian.class, librarianId);
+	        	Librarian k = entityManager.find(Librarian.class, librarianId);
+	        	if(k==null) {
+	        		throw new NoRecordFoundException("No Librarian Found ");
+	        	}
+	            return k;
 	        } catch (Exception ex) {
 	            throw new SomethingWentWrongException("Failed to get librarian by ID."+  ex);
 	        } finally {
@@ -74,7 +79,11 @@ public class LibrarianDAOImpl implements LibrarianDAO{
 	    	 EntityManager entityManager = DbUtil.getConnection();
 	        try {
 	            TypedQuery<Librarian> query = entityManager.createQuery("SELECT l FROM Librarian l", Librarian.class);
-	            return query.getResultList();
+	            List<Librarian> k = query.getResultList();
+	            if(k.size()==0) {
+	            	throw new NoRecordFoundException("No Librarians Found ");
+	            }
+	            return k;
 	        } catch (Exception ex) {
 	            throw new SomethingWentWrongException("Failed to get all librarians."+ ex);
 	        } finally {

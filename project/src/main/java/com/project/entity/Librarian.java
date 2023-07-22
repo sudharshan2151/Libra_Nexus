@@ -49,6 +49,13 @@ public class Librarian {
 		this.password = password;
 	}
 
+	public Librarian(String name, String email, String password) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.password = password;
+	}
+
 	public int getId() {
 		return id;
 	}

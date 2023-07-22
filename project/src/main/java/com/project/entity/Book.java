@@ -90,6 +90,15 @@ public class Book {
 		this.availability = availability;
 	}
 
+	public Book(String title, String author, String genre, Availability availability) {
+		super();
+		
+		this.title = title;
+		this.author = author;
+		this.genre = genre;
+		this.availability = availability;
+	}
+
 	public Book(int id, String title, String author, String genre, Availability availability) {
 		super();
 		this.id = id;
