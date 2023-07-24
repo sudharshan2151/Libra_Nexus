@@ -2,7 +2,7 @@
 
 The Library Management System is a software solution designed to efficiently manage the operations of a library. It aims to provide librarians and students with a platform to facilitate book management, rental transactions, feedback collection, and more.
 
-## Table of Contents
+## Table of Contents:
 - [Description](#description)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
@@ -12,11 +12,11 @@ The Library Management System is a software solution designed to efficiently man
 - [Contributing](#contributing)
 - [License](#license)
 
-## Description
+## Description:
 
 The Library Management System is a console-based Java application developed using the DAO pattern and Hibernate for database interaction. It allows librarians to perform administrative tasks related to books, track student rentals, view feedback and ratings provided by students. Students can explore available books, rent books, provide feedback, and rate rented books.
 
-## Features
+## Features:
 
 - Librarian
   - Register and login to librarian accounts.
@@ -32,7 +32,7 @@ The Library Management System is a console-based Java application developed usin
   - Return rented books within 7 days.
   - Log out from the student account.
 
-## Technologies Used
+## Technologies Used:
 
 - Java
 - Hibernate
@@ -40,11 +40,11 @@ The Library Management System is a console-based Java application developed usin
 - DAO Pattern
 - Jakarta Persistence API (JPA)
 
-## Database Schema
+## Database Schema:
 
 The database schema for the Library Management System consists of tables for librarians, students, books, rentals, feedbacks, etc. The ER-Diagram and SQL scripts for creating the database tables can be found in the `database` folder.
 
-## Setup Instructions
+## Setup Instructions:
 
 1. Install Java (JDK) on your system.
 2. Install MySQL and create a database named "project" (or update the database configuration in `persistence.xml`).
@@ -53,16 +53,16 @@ The database schema for the Library Management System consists of tables for lib
 5. Build the project to download dependencies.
 6. Run the `Main` class to start the console application.
 
-## Usage
+## Usage:
 
 1. Log in as a librarian or student based on the provided functionalities.
 2. Follow the console prompts to perform various tasks (e.g., add books, rent books, provide feedback, etc.).
 
-## Contributing
+## Contributing:
 
 Contributions are welcome! If you'd like to contribute to the project, please follow the standard GitHub fork and pull request workflow.
 
-## License
+## License:
 
 This project is licensed under the [MIT License](LICENSE).
 
