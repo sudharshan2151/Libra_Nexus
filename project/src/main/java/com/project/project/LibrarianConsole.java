@@ -102,9 +102,11 @@ public class LibrarianConsole {
 	        Book book=null;
 			try {
 				book = bookService.getBookById(bookId);
+				
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
 				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
+				return;
 			}
 	      
 
@@ -118,6 +120,20 @@ public class LibrarianConsole {
 
 	        System.out.print("Genre: ");
 	        String genre = scanner.nextLine();
+	        
+	        System.out.println("Availability => 1: for 'YES': 2: for 'No'");
+	        int avai = Integer.parseInt(scanner.nextLine());
+	        if(avai==1) {
+	        	book.setAvailability(Availability.AVAILABLE);
+	        
+	        }
+	        else if(avai==2) {
+	        	book.setAvailability(Availability.NOT_AVAILABLE);
+	        }
+	        else {
+	        	System.out.println("Invalid input");
+	        	return;
+	        }
 
 	        book.setTitle(title);
 	        book.setAuthor(author);
@@ -216,7 +232,7 @@ public class LibrarianConsole {
 		                  
 	                    break;
 	                default:
-	                    System.out.println("Invalid choice. Please try again.");
+	                    System.out.println(colorChange.ANSI_RED+"Invalid choice. Please try again."+colorChange.ANSI_RESET);
 	            }
 	        }
 	        

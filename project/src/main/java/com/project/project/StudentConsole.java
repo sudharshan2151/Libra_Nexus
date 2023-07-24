@@ -55,7 +55,7 @@ public class StudentConsole {
     		System.out.println("=================================================================");
     		System.out.println("=> Welcome, Student: "+stu.getName());
 	        System.out.println("=> 1. View all books in the library");
-	        System.out.println("=> 2. Apply filters and sorting options to search and browse books");
+	        System.out.println("=> 2. Search and browse books");
 	        System.out.println("=> 3. Rent a book");
 	        System.out.println("=> 4. Return a rented book");
 	        System.out.println("=> 5. View all rented book");
@@ -224,12 +224,13 @@ public class StudentConsole {
 	        }
 
 	        // Create a new rental object
-	        Rental rental = new Rental();
-	        rental.setStudent(stu);
-	        rental.setBook(book);
-	        rental.setRentalDate(LocalDate.now());
-	        rental.setReturnDate(LocalDate.now().plusDays(7));
-	        rental.setReturnStatus(ReturnStatus.NOT_RETURNED);
+	        if(book.getAvailability()==Availability.AVAILABLE) {
+		        Rental rental = new Rental();
+		        rental.setStudent(stu);
+		        rental.setBook(book);
+		        rental.setRentalDate(LocalDate.now());
+		        rental.setReturnDate(LocalDate.now().plusDays(7));
+		        rental.setReturnStatus(ReturnStatus.NOT_RETURNED);
 
 	        // Add the rental to the database
 	        RentalService rentalService = new RentalServiceImpl();
@@ -251,7 +252,7 @@ public class StudentConsole {
 			}
 
 	        System.out.println("Book rented successfully.");
-		
+	       }
 	}
 
 	private static void changePassword(Scanner scanner) {
