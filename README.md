@@ -44,6 +44,8 @@ The Library Management System is a console-based Java application developed usin
 
 The database schema for the Library Management System consists of tables for librarians, students, books, rentals, feedbacks, etc. The ER-Diagram and SQL scripts for creating the database tables can be found in the `database` folder.
 
+![diagram-export-7_24_2023, 7_37_27 PM](https://github.com/sudharshan2151/ablaze-twist-8354/assets/123924081/3542b644-be33-4567-be14-2d3b51dcf975)
+
 ## Setup Instructions:
 
 1. Install Java (JDK) on your system.
