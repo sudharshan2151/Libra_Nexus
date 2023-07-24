@@ -218,7 +218,7 @@ public class StudentConsole {
 				// TODO Auto-generated catch block
 				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
-	        if (book == null || book.getAvailability() != Availability.AVAILABLE) {
+	        if (book == null || !book.getAvailability().equals(Availability.AVAILABLE)) {
 	            System.out.println("Book not available for rent.");
 	            return;
 	        }
@@ -252,7 +252,7 @@ public class StudentConsole {
 			}
 
 	        System.out.println("Book rented successfully.");
-	       }
+	        }
 	}
 
 	private static void changePassword(Scanner scanner) {
