@@ -67,7 +67,7 @@ public class RentalDAOImpl implements RentalDAO {
 	        try {
 	            TypedQuery<Rental> query = entityManager.createQuery("SELECT r FROM Rental r", Rental.class);
 	            List<Rental> k = query.getResultList();
-	            if(k==null) {
+	            if(k==null || k.size()==0 || k.isEmpty()) {
 	            	throw new NoRecordFoundException("NO Data found ");
 	            }
 	            return k;

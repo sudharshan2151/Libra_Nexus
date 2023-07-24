@@ -63,7 +63,7 @@ public class FeedbackDAOImpl implements FeedbackDAO{
 	        try {
 	            TypedQuery<Feedback> query = entityManager.createQuery("SELECT f FROM Feedback f", Feedback.class);
 	            List<Feedback> k = query.getResultList();
-	            if(k==null || k.size()==0) {
+	            if(k==null || k.size()==0 || k.isEmpty()) {
 	            	throw new NoRecordFoundException("No feedbacks given");
 	            }
 	            return k;

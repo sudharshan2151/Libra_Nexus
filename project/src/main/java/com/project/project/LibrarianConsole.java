@@ -62,10 +62,7 @@ public class LibrarianConsole {
 	                case 6:
 	                	running = false;
 	                    System.out.println("You have been logged out.");
-	                    return;
-	                case 7:
-	                    running = false;
-	                    System.out.println("Thank you for using the Library Management System. Goodbye!");
+	                    System.out.println(colorChange.ANSI_GREEN+"Thank you for using the Library Management System. Goodbye!🙌🙌"+colorChange.ANSI_RESET);
 	                    break;
 	                default:
 	                    System.out.println("Invalid choice. Please try again.");
@@ -91,7 +88,7 @@ public class LibrarianConsole {
 				System.out.println("Added Sucessfully----------->-------");
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 
 	        System.out.println("Book added successfully.");
@@ -107,7 +104,7 @@ public class LibrarianConsole {
 				book = bookService.getBookById(bookId);
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 	      
 
@@ -131,7 +128,7 @@ public class LibrarianConsole {
 				System.out.println("Book information updated successfully.");
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 
 	        
@@ -149,7 +146,8 @@ public class LibrarianConsole {
 				//System.out.println(b);
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 	       
 	    }
@@ -159,12 +157,14 @@ public class LibrarianConsole {
 	        List<Rental> studentRentals;
 			try {
 				studentRentals = rental.getAllRentals();
+				System.out.println("----------------------------");
 				for (Rental rental : studentRentals) {
 		            System.out.println(rental);
+		            System.out.println("---------------------------------");
 		        }
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 	        
 	    }
@@ -190,10 +190,15 @@ public class LibrarianConsole {
 	    	Scanner scanner = new Scanner(System.in);
 	        boolean running = true;
 	        while (running) {
+	        	System.out.println("===========================================");
 	            System.out.println("Welcome to the Library Management System!");
-	            System.out.println("1. Register for a Librarian account");
-	            System.out.println("2. Log in to the Librarian account");
-	            System.out.println("3. Exit");
+	            
+	            System.out.println("=> 1. Register for a Librarian account");
+	            
+	            System.out.println("=> 2. Log in to the Librarian account");
+	            
+	            System.out.println("=> 3. Exit");
+	            System.out.println("============================================");
 	            System.out.print("Enter your choice: ");
 	            int choice = scanner.nextInt();
 	            scanner.nextLine(); // Consume the newline character
@@ -207,7 +212,8 @@ public class LibrarianConsole {
 	                    break;
 	                case 3:
 	                    running = false;
-	                    System.out.println("Thank you for using the Library Management System. Goodbye!");
+	                    System.out.println(colorChange.ANSI_GREEN+"Thank you for using the Library Management System. Goodbye!🙌🙌🙌"+colorChange.ANSI_RESET);
+		                  
 	                    break;
 	                default:
 	                    System.out.println("Invalid choice. Please try again.");
@@ -234,7 +240,7 @@ public class LibrarianConsole {
 				run(k);
 			} catch (NoRecordFoundException | SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 		}
 
@@ -258,7 +264,7 @@ public class LibrarianConsole {
 				System.out.println("Registered SucessfullY==================");
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 		}
 

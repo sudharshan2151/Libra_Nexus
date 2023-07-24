@@ -39,7 +39,7 @@ public class StudentConsole {
 				mainSub(k);
 			} catch (NoRecordFoundException | SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 	       
 	    }
@@ -121,7 +121,7 @@ public class StudentConsole {
 				book = bookService.getBookById(bookIdentifier);
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 
 	        if (book != null && book.getAvailability() == Availability.NOT_AVAILABLE) {
@@ -132,7 +132,7 @@ public class StudentConsole {
 					rental = rentalService.getRentalByStudentAndBook(stu.getId(), book.getId());
 				} catch (SomethingWentWrongException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 				}
 
 	            if (rental != null ) {
@@ -143,7 +143,7 @@ public class StudentConsole {
 						rentalService.updateRental(rental);
 					} catch (SomethingWentWrongException e) {
 						// TODO Auto-generated catch block
-						System.out.println(e.getMessage());
+						System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 					}
 
 	                // Update the book's availability to AVAILABLE
@@ -152,10 +152,10 @@ public class StudentConsole {
 						bookService.updateBook(book);
 					} catch (SomethingWentWrongException e) {
 						// TODO Auto-generated catch block
-						System.out.println(e.getMessage());
+						System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 					}
 
-	                System.out.println("Book successfully returned.");
+	                System.out.println(colorChange.ANSI_GREEN+"Book successfully returned."+colorChange.ANSI_RESET);
 	                System.out.println("Please provide feedback===========>");
 	                feedback(stu,book);
 	            } else {
@@ -180,9 +180,9 @@ public class StudentConsole {
 		try {
 			
 			fs.addFeedback(fed);
-			System.out.println("Thank You for Your Feedback=========>");
+			System.out.println(colorChange.ANSI_GREEN+"Thank You for Your Feedback=========>"+colorChange.ANSI_RESET);
 		} catch (SomethingWentWrongException e) {
-			System.out.println(e.getMessage());
+			System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 		}
 		
 		
@@ -195,7 +195,7 @@ public class StudentConsole {
 			k.getRentalsByStudentId(stu.getId()).forEach(System.out::println);
 		} catch (SomethingWentWrongException e) {
 			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
+			System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 		}
 		
 	}
@@ -216,7 +216,7 @@ public class StudentConsole {
 				System.out.println(book);
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 	        if (book == null || book.getAvailability() != Availability.AVAILABLE) {
 	            System.out.println("Book not available for rent.");
@@ -238,7 +238,7 @@ public class StudentConsole {
 				rentalService.addRental(rental);
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 
 	        // Update the book availability to "RENTED"
@@ -247,7 +247,7 @@ public class StudentConsole {
 				bookService.updateBook(book);
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 
 	        System.out.println("Book rented successfully.");
@@ -274,11 +274,11 @@ public class StudentConsole {
 				if(pass1.equals(pass2)) {
 					k.setPassword(pass2);
 					ser.updateStudent(k);
-					System.out.println("Updated Sucessfully------------->");
+					System.out.println(colorChange.ANSI_GREEN+"Updated Sucessfully------------->"+colorChange.ANSI_RESET);
 				}
 			} catch (NoRecordFoundException | SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 	       
 		
@@ -303,7 +303,7 @@ public class StudentConsole {
 				List<Rental> rent = k1.getRentalsByStudentId(k.getId()).stream().filter(p->p.getReturnStatus()==ReturnStatus.NOT_RETURNED).toList();
 				if(rent.size()==0 || rent==null) {
 					ser.updateStudent(k);
-					System.out.println("Deleted Sucessfully------->------");
+					System.out.println(colorChange.ANSI_GREEN+"Deleted Sucessfully------->------"+colorChange.ANSI_RESET);
 					return true;
 				}else {
 					rent.forEach(System.out::println);
@@ -313,7 +313,7 @@ public class StudentConsole {
 				
 			} catch (NoRecordFoundException | SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 			return false;
 	       
@@ -326,23 +326,24 @@ public class StudentConsole {
 			k.getAvailableBooks().forEach(System.out::println);
 		} catch (SomethingWentWrongException | NoRecordFoundException e) {
 			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
+			System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 		}
 		
 	}
 
 	private static void showMenu() {
 		// TODO Auto-generated method stub
-		 System.out.println("====================================================");
+		
 	    	Scanner br =new Scanner(System.in);
 	    	
 	    	int choice ;
 	    	do {
-	    		
-		        System.out.println("1. Search by Book Name");
-		        System.out.println("2. Search by Genre");
-		        System.out.println("3. Search by Author");
-		        System.out.println("0. Exit");
+	    		System.out.println("====================================================");
+		        System.out.println("=> 1. Search by Book Name");
+		        System.out.println("=> 2. Search by Genre");
+		        System.out.println("=> 3. Search by Author");
+		        System.out.println("=> 0. Exit");
+		        System.out.println("====================================================");
 	    		choice = Integer.parseInt(br.nextLine());
 		        
 		        switch (choice) {
@@ -391,7 +392,7 @@ public class StudentConsole {
 			k.searchBooksByGenre(name).forEach(System.out::println);;
 		} catch (SomethingWentWrongException | NoRecordFoundException e) {
 			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
+			System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 		}
 	}
 
@@ -404,7 +405,7 @@ public class StudentConsole {
 			k.searchBooksByTitle(name).forEach(System.out::println);
 		} catch (SomethingWentWrongException | NoRecordFoundException e) {
 			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
+			System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 		}
 	}
 
@@ -418,7 +419,7 @@ public class StudentConsole {
 			}
 		} catch (SomethingWentWrongException e) {
 			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
+			System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 		}
 		
 	}
@@ -428,10 +429,11 @@ public class StudentConsole {
 		 Scanner scanner = new Scanner(System.in);
 	        boolean running = true;
 	        while (running) {
-	            System.out.println("Welcome to the Library Management System!");
-	            System.out.println("1. Register for a student account");
-	            System.out.println("2. Log in to the student account");
-	            System.out.println("3. Exit");
+	        	System.out.println(colorChange.ANSI_YELLOW+"=====================================================");
+	            System.out.println("       Welcome to the Library Management System!👋👋👋"+colorChange.ANSI_RESET);
+	            System.out.println("=> 1. Register for a student account");
+	            System.out.println("=> 2. Log in to the student account");
+	            System.out.println("=> 3. Exit");
 	            System.out.print("Enter your choice: ");
 	            int choice = scanner.nextInt();
 	            scanner.nextLine(); // Consume the newline character
@@ -445,10 +447,10 @@ public class StudentConsole {
 	                    break;
 	                case 3:
 	                    running = false;
-	                    System.out.println("Thank you for using the Library Management System. Goodbye!");
+	                    System.out.println(colorChange.ANSI_GREEN+"Thank you for using the Library Management System. Goodbye!🙌🙌🙌"+colorChange.ANSI_RESET);
 	                    break;
 	                default:
-	                    System.out.println("Invalid choice. Please try again.");
+	                    System.out.println(colorChange.ANSI_RED+"Invalid choice. Please try again."+colorChange.ANSI_RESET);
 	            }
 	        }
 	    }
@@ -469,10 +471,10 @@ public class StudentConsole {
 	        StudentService ser = new StudentServiceImpl();
 	        try {
 				ser.addStudent(newStudent);
-				System.out.println("Registered SucessfullY==================");
+				System.out.println(colorChange.ANSI_GREEN+"Registered SucessfullY=================="+colorChange.ANSI_RESET);
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
+				System.out.println(colorChange.ANSI_RED+e.getMessage()+colorChange.ANSI_RESET);
 			}
 	    }
 

@@ -59,10 +59,10 @@ public class App
 
 	        do {
 	        	System.out.println("======================================");
-	            System.out.println("Enter your choice" + ANSI_WHITE);
-	            System.out.println(ANSI_BLACK_BACKGROUND + "1. Librarian");
-	            System.out.println(ANSI_BLACK_BACKGROUND + "2. Student" + ANSI_WHITE);
-	            System.out.println(ANSI_BLACK_BACKGROUND + "3. Exit" + ANSI_RESET);
+	           // System.out.println("Enter your choice" );
+	            System.out.println(ANSI_BLUE +"=> 1. Librarian");
+	            System.out.println("=> 2. Student" );
+	            System.out.println("=> 3. Exit"+ ANSI_RESET );
 	            System.out.println("========================================");
 	            choice = Integer.parseInt(sc.nextLine());
 
