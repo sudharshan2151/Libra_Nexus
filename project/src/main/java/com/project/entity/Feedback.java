@@ -30,15 +30,10 @@ public class Feedback {
     @Column(nullable = false)
     private int rating;
 
-    // Other attributes, constructors, getters/setters
-
-    // Constructors, getters, and setters as before
-
     @Override
     public String toString() {
         return "Feedback{" +
                 "id=" + id +
-                ", student=" + student +
                 ", book=" + book +
                 ", feedback='" + feedback + '\'' +
                 ", rating=" + rating +
@@ -48,6 +43,14 @@ public class Feedback {
 	public Feedback() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	
+	public Feedback(Student student, Book book, String feedback, int rating) {
+		super();
+		this.student = student;
+		this.book = book;
+		this.feedback = feedback;
+		this.rating = rating;
 	}
 
 	public Feedback(int id, Student student, Book book, String feedback, int rating) {
