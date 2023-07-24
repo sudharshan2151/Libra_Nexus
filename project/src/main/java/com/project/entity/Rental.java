@@ -1,11 +1,14 @@
 package com.project.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,7 +32,7 @@ public class Rental {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Rental(int id, Student student, Book book, Date rentalDate, Date returnDate) {
+	public Rental(int id, Student student, Book book, LocalDate rentalDate, LocalDate returnDate) {
 		super();
 		this.id = id;
 		this.student = student;
@@ -51,7 +54,7 @@ public class Rental {
     private Book book;
 
     @Column(name = "rental_date", nullable = false)
-    private Date rentalDate;
+    private LocalDate rentalDate;
 
     @Enumerated(EnumType.STRING)
     private ReturnStatus returnStatus;
@@ -79,24 +82,24 @@ public class Rental {
 		this.book = book;
 	}
 
-	public Date getRentalDate() {
+	public LocalDate getRentalDate() {
 		return rentalDate;
 	}
 
-	public void setRentalDate(Date rentalDate) {
+	public void setRentalDate(LocalDate rentalDate) {
 		this.rentalDate = rentalDate;
 	}
 
-	public Date getReturnDate() {
+	public LocalDate getReturnDate() {
 		return returnDate;
 	}
 
-	public void setReturnDate(Date returnDate) {
+	public void setReturnDate(LocalDate returnDate) {
 		this.returnDate = returnDate;
 	}
 
 	@Column(name = "return_date")
-    private Date returnDate;
+    private LocalDate returnDate;
 
     
 

@@ -119,7 +119,60 @@ public class RentalDAOImpl implements RentalDAO {
 	        }
 	    }
 
-	
+	    @Override
+	    public Rental getRentalByBook( int bookId) throws SomethingWentWrongException {
+	        EntityManager entityManager = DbUtil.getConnection();
+	        try {
+	            TypedQuery<Rental> query = entityManager.createQuery(
+	                    "SELECT r FROM Rental r WHERE r.book.id = :bookId", Rental.class);
+	            
+	            query.setParameter("bookId", bookId);
+	            List<Rental> rentals = query.getResultList();
+	             if(rentals.isEmpty()) { 
+	            	 throw new NoRecordFoundException("NO Data found :"); 
+	             }
+	             return rentals.get(0);
+	             
+	             
+	        } catch (Exception ex) {
+	            throw new SomethingWentWrongException("Failed to get rental by student and book. "+ ex);
+	        } finally {
+	            entityManager.close();
+	        }
+	    }
+	    @Override
+	    public List<Rental> getRentalByBookk( int bookId) throws SomethingWentWrongException {
+	        EntityManager entityManager = DbUtil.getConnection();
+	        try {
+	            TypedQuery<Rental> query = entityManager.createQuery(
+	                    "SELECT r FROM Rental r WHERE r.book.id = :bookId", Rental.class);
+	            
+		            query.setParameter("bookId", bookId);
+		            List<Rental> rentals = query.getResultList();
+	             
+	             return rentals;
+	             
+	             
+	        } catch (Exception ex) {
+	            throw new SomethingWentWrongException("Failed to get rental by student and book. "+ ex);
+	        } finally {
+	            entityManager.close();
+	        }
+	    }
+	    @Override
+	    public void RemoveRental(int id) throws SomethingWentWrongException {
+	        EntityManager entityManager = DbUtil.getConnection();
+	        try {
+	            entityManager.getTransaction().begin();
+	            entityManager.remove(id);
+	            entityManager.getTransaction().commit();
+	        } catch (Exception ex) {
+	            entityManager.getTransaction().rollback();
+	            throw new SomethingWentWrongException("Failed to add rental."+ ex);
+	        } finally {
+	            entityManager.close();
+	        }
+	    }
 
 
 }

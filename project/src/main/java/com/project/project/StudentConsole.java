@@ -1,28 +1,25 @@
 package com.project.project;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
-
 import com.project.entity.Availability;
 import com.project.entity.Book;
+import com.project.entity.Feedback;
 import com.project.entity.Rental;
 import com.project.entity.ReturnStatus;
 import com.project.entity.Student;
+import com.project.entity.StudentStatus;
 import com.project.exception.NoRecordFoundException;
 import com.project.exception.SomethingWentWrongException;
 import com.project.service.BookService;
 import com.project.service.BookServiceImpl;
+import com.project.service.FeedbackService;
+import com.project.service.FeedbackServiceImpl;
 import com.project.service.RentalService;
 import com.project.service.RentalServiceImpl;
 import com.project.service.StudentService;
 import com.project.service.StudentServiceImpl;
-import com.project.utility.DbUtil;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 
 public class StudentConsole {
     
@@ -49,22 +46,24 @@ public class StudentConsole {
 
     private static void mainSub(Student stu) {
     	  // Example:
+    	
     	System.out.println("====================================================");
     	Scanner br =new Scanner(System.in);
     	
     	int choice ;
     	do {
-    		System.out.println("Welcome, Student: "+stu.getName());
-	        System.out.println("1. View all books in the library");
-	        System.out.println("2. Apply filters and sorting options to search and browse books");
-	        System.out.println("3. Rent a book");
-	        System.out.println("4. Return a rented book");
-	        System.out.println("5. View all rented book");
-	        System.out.println("6. Provide feedback and ratings on");
-	        System.out.println("7. View available books");
-	        System.out.println("8. Delete the account");
-	        System.out.println("9. Change the Password");
-	        System.out.println("0. Exit");
+    		System.out.println("=================================================================");
+    		System.out.println("=> Welcome, Student: "+stu.getName());
+	        System.out.println("=> 1. View all books in the library");
+	        System.out.println("=> 2. Apply filters and sorting options to search and browse books");
+	        System.out.println("=> 3. Rent a book");
+	        System.out.println("=> 4. Return a rented book");
+	        System.out.println("=> 5. View all rented book");
+	        System.out.println("=> 6. View available books");
+	        System.out.println("=> 7. Delete the account");
+	        System.out.println("=> 8. Change the Password");
+	        System.out.println("=> 0. LogOut");
+	        System.out.println("===================================================================");
     		choice = Integer.parseInt(br.nextLine());
 	        
 	        switch (choice) {
@@ -76,38 +75,30 @@ public class StudentConsole {
             	showMenu();
                 break;
             case 3:
-                // Add new books to the library system
-                // Read necessary information from the user
-                // Create a new Book object and call bookService.addBook() to add to the system
             	rent(stu,br);
                 break;
             case 4:
-                // Update book information
-                // Read book ID from the user
-                // Retrieve the book by ID using bookService.getBookById()
-                // Update the book object with new details
-                // Call bookService.updateBook() to update the book in the system
+              
+            	returnBook(stu);
                 break;
             case 5:
-                // Remove books from the system
-                // Read book ID from the user
-                // Call bookService.removeBook() to remove the book from the system
+                
+            	rentById(stu);
             	break;
             case 6:
-            	
-            	break;
-            case 7:
             	availble();
             	break;
-            case 8:
-            	deleteAccount(br);
-            	choice=0;
+            case 7:
+            	if(deleteAccount(br)) {
+            		choice=0;
+            	}
             	break;
-            case 9:
+            case 8:
             	changePassword(br);
+            	break;
             case 0:
             	choice = 0;
-                System.out.println("Exiting...");
+                System.out.println("Loging Out .....................");
                 break;
             default:
             	System.out.println("Invalid choice. Please try again.");
@@ -116,8 +107,100 @@ public class StudentConsole {
 
     	}
 
+    
 	
-	 private static void rent(Student stu,Scanner br) {
+	 private static void returnBook(Student stu) {
+		// TODO Auto-generated method stub
+		 Scanner scanner = new Scanner(System.in);
+	        System.out.print("Enter the book ID or title you want to return: ");
+	        int bookIdentifier = Integer.parseInt(scanner.nextLine());
+	        BookService bookService=new BookServiceImpl();
+
+	        Book book=null;
+			try {
+				book = bookService.getBookById(bookIdentifier);
+			} catch (SomethingWentWrongException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+	        if (book != null && book.getAvailability() == Availability.NOT_AVAILABLE) {
+	            // Check if the book is rented by the student (you may need additional checks here)
+	            Rental rental =null;
+	            RentalService rentalService = new RentalServiceImpl();
+				try {
+					rental = rentalService.getRentalByStudentAndBook(stu.getId(), book.getId());
+				} catch (SomethingWentWrongException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+	            if (rental != null ) {
+	                // Update the return date to the current date
+	                rental.setReturnDate(LocalDate.now());
+	                rental.setReturnStatus(ReturnStatus.RETURNED);
+	                try {
+						rentalService.updateRental(rental);
+					} catch (SomethingWentWrongException e) {
+						// TODO Auto-generated catch block
+						System.out.println(e.getMessage());
+					}
+
+	                // Update the book's availability to AVAILABLE
+	                book.setAvailability(Availability.AVAILABLE);
+	                try {
+						bookService.updateBook(book);
+					} catch (SomethingWentWrongException e) {
+						// TODO Auto-generated catch block
+						System.out.println(e.getMessage());
+					}
+
+	                System.out.println("Book successfully returned.");
+	                System.out.println("Please provide feedback===========>");
+	                feedback(stu,book);
+	            } else {
+	                System.out.println("You have not rented this book or it has already been returned.");
+	            }
+	        } else {
+	            System.out.println("Book not found or not available for return.");
+	        }
+	    }
+
+	 
+	private static void feedback(Student stu,Book book) {
+		// TODO Auto-generated method stub
+		Scanner br = new Scanner(System.in);
+		System.out.println("Enter the rating out of 5===>");
+		int rat = Integer.parseInt(br.nextLine());
+		System.out.println("Enter the feedback===>");
+		String des = br.nextLine();
+		Feedback fed = new Feedback(stu,book,des,rat);
+		BookService bs  = new BookServiceImpl();
+		FeedbackService fs = new FeedbackServiceImpl();
+		try {
+			
+			fs.addFeedback(fed);
+			System.out.println("Thank You for Your Feedback=========>");
+		} catch (SomethingWentWrongException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		
+	}
+
+	private static void rentById(Student stu) {
+		// TODO Auto-generated method stub
+		RentalService k = new RentalServiceImpl();
+		try {
+			k.getRentalsByStudentId(stu.getId()).forEach(System.out::println);
+		} catch (SomethingWentWrongException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
+		
+	}
+
+	private static void rent(Student stu,Scanner br) {
 		// TODO Auto-generated method stub
 		// Get book ID from the student
 	        // ...
@@ -130,6 +213,7 @@ public class StudentConsole {
 	        Book book=null;
 			try {
 				book = bookService.getBookById(bookId);
+				System.out.println(book);
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -143,7 +227,8 @@ public class StudentConsole {
 	        Rental rental = new Rental();
 	        rental.setStudent(stu);
 	        rental.setBook(book);
-	        rental.setRentalDate(new Date());
+	        rental.setRentalDate(LocalDate.now());
+	        rental.setReturnDate(LocalDate.now().plusDays(7));
 	        rental.setReturnStatus(ReturnStatus.NOT_RETURNED);
 
 	        // Add the rental to the database
@@ -199,7 +284,7 @@ public class StudentConsole {
 		
 	}
 
-	private static void deleteAccount(Scanner scanner) {
+	private static boolean deleteAccount(Scanner scanner) {
 		// TODO Auto-generated method stub
 		 System.out.println("Log in to the student account");
 	        System.out.print("Enter your email: ");
@@ -212,12 +297,25 @@ public class StudentConsole {
 	        try {
 				Student k = ser.loginStudent(email, password);
 				//System.out.println(k);
-				ser.removeStudent(k.getId());
-				System.out.println("Deleted Sucessfully------->------");
+				k.setS(StudentStatus.NOT_ACTIVE);
+				
+				RentalService k1 = new RentalServiceImpl();
+				List<Rental> rent = k1.getRentalsByStudentId(k.getId()).stream().filter(p->p.getReturnStatus()==ReturnStatus.NOT_RETURNED).toList();
+				if(rent.size()==0 || rent==null) {
+					ser.updateStudent(k);
+					System.out.println("Deleted Sucessfully------->------");
+					return true;
+				}else {
+					rent.forEach(System.out::println);
+					System.out.println("Please Return all the books");
+					return false;
+				}
+				
 			} catch (NoRecordFoundException | SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
 				System.out.println(e.getMessage());
 			}
+			return false;
 	       
 	}
 
@@ -325,24 +423,10 @@ public class StudentConsole {
 		
 	}
 
-	public static void main(String[] args) {
+	//@SuppressWarnings("unchecked")
+	public static void main(String[] args)  {
 		 Scanner scanner = new Scanner(System.in);
 	        boolean running = true;
-	        EntityManager entityManager = DbUtil.getConnection();
-			 try {
-				 CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-		            CriteriaQuery<Book> query = criteriaBuilder.createQuery(Book.class);
-		            Root<Book> root = query.from(Book.class);
-		           query.select(root);
-
-		             entityManager.createQuery(query).getResultList().forEach(System.out::println);;
-		            
-		        }catch(Exception e) { 
-		        	//throw new SomethingWentWrongException("NO books is available");
-		        }finally {
-		 
-		            entityManager.close();
-		        }
 	        while (running) {
 	            System.out.println("Welcome to the Library Management System!");
 	            System.out.println("1. Register for a student account");
@@ -381,14 +465,14 @@ public class StudentConsole {
 	        System.out.print("Enter your password: ");
 	        String password = scanner.nextLine();
 
-	        Student newStudent = new Student(name, email, password);
+	        Student newStudent = new Student(name, email, password,StudentStatus.ACTIVE);
 	        StudentService ser = new StudentServiceImpl();
 	        try {
 				ser.addStudent(newStudent);
 				System.out.println("Registered SucessfullY==================");
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 	    }
 

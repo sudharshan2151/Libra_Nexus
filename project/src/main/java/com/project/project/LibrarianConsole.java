@@ -1,6 +1,7 @@
 package com.project.project;
 import java.util.List;
 import java.util.Scanner;
+
 import com.project.entity.Availability;
 import com.project.entity.Book;
 import com.project.entity.Feedback;
@@ -37,7 +38,7 @@ public class LibrarianConsole {
 	            System.out.println("4. View student rentals");
 	            System.out.println("5. View feedback and ratings");
 	            System.out.println("6. Log out");
-	            System.out.println("7. Exit");
+	            //System.out.println("7. Exit");
 	            System.out.print("Enter your choice: ");
 	            int choice = scanner.nextInt();
 	            scanner.nextLine(); // Consume the newline character
@@ -59,6 +60,7 @@ public class LibrarianConsole {
 	                    viewFeedbackAndRatings();
 	                    break;
 	                case 6:
+	                	running = false;
 	                    System.out.println("You have been logged out.");
 	                    return;
 	                case 7:
@@ -126,34 +128,30 @@ public class LibrarianConsole {
 
 	        try {
 				bookService.updateBook(book);
+				System.out.println("Book information updated successfully.");
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
 				System.out.println(e.getMessage());
 			}
 
-	        System.out.println("Book information updated successfully.");
+	        
 	    }
 
 	    private static void removeBook() {
 	        System.out.print("Enter the ID of the book you want to remove: ");
-	        int bookId = scanner.nextInt();
-	        scanner.nextLine(); // Consume the newline character
+	        int bookId = Integer.parseInt(scanner.nextLine());
+	         // Consume the newline character
 
-	        Book book=null;
-			try {
-				book = bookService.getBookById(bookId);
+	        BookService k = new BookServiceImpl();
+	    	try {
+				 k.removeBook(bookId);;
+				 System.out.println("Deleted Sucessfully============>");
+				//System.out.println(b);
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
-	        try {
-				bookService.removeBook(book.getId());
-			} catch (SomethingWentWrongException e) {
-				// TODO Auto-generated catch block
-				System.out.println(e.getMessage());
-			}
-
-	        System.out.println("Book removed successfully.");
+	       
 	    }
 
 	    private static void viewStudentRentals() {
@@ -176,9 +174,8 @@ public class LibrarianConsole {
 	        List<Feedback> feedbacks;
 			try {
 				feedbacks = feedback.getAllFeedbacks();
-				for (Feedback feedback : feedbacks) {
-		            System.out.println(feedback);
-		        }
+				feedbacks.forEach(System.out::println);
+				
 			} catch (SomethingWentWrongException e) {
 				// TODO Auto-generated catch block
 				System.out.println(e.getMessage());

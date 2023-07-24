@@ -1,12 +1,16 @@
 package com.project.entity;
-import jakarta.persistence.Column;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -28,29 +32,43 @@ public class Book {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Availability availability;
-
-    // Other attributes, constructors, getters/setters
-
-    public boolean isAvailable() {
-        return availability == Availability.AVAILABLE;
-    }
-
-    public void setAvailable(boolean available) {
-        this.availability = available ? Availability.AVAILABLE : Availability.NOT_AVAILABLE;
-    }
-
+    
+    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+    private List<Feedback> feedBack;
+    
+    
    
 
 	
 
-	@Override
-	public String toString() {
-		return String.format("Book [id=%s, title=%s, author=%s, genre=%s, availability=%s]", id, title, author, genre,
-				availability);
+	public List<Feedback> getFeedBack() {
+		return feedBack;
 	}
+
+
+	public void setFeedBack(Feedback feedBack) {
+		this.feedBack.add(feedBack);
+	}
+
+
+	@Override
+        	    public String toString() {
+            return "Book ID: " + id + "\n"
+                 + "Title: " + title + "\n"
+                 + "Author: " + author + "\n"
+                 + "Genre: " + genre + "\n"
+                 + "Availability: " + availability;
+        }
+    
+
 
 	public int getId() {
 		return id;
+	}
+
+	public Book() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	public void setId(int id) {

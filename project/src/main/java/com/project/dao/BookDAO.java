@@ -9,7 +9,9 @@ public interface BookDAO {
     void addBook(Book book) throws SomethingWentWrongException;
     void updateBook(Book book) throws SomethingWentWrongException;
     void removeBook(int bookId) throws SomethingWentWrongException;
+    @SuppressWarnings("unchecked")
     Book getBookById(int bookId) throws SomethingWentWrongException;
+    @SuppressWarnings("unchecked")
     List<Book> getAllBooks() throws SomethingWentWrongException;
     List<Book> getAvailableBooks() throws SomethingWentWrongException, NoRecordFoundException;
 }

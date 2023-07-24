@@ -23,9 +23,7 @@ public class Student {
     @Column(nullable = false)
     private String password;
 
-    // Other attributes, constructors, getters/setters
-
-    // Constructors, getters, and setters as before
+    private StudentStatus s ;
 
     @Override
     public String toString() {
@@ -36,11 +34,12 @@ public class Student {
                 '}';
     }
 
-	public Student(String name, String email, String password) {
+	public Student(String name, String email, String password,StudentStatus s) {
 		super();
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		this.s = s;
 	}
 
 	public Student() {
@@ -48,12 +47,13 @@ public class Student {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Student(int id, String name, String email, String password) {
+	public Student(int id, String name, String email, String password,StudentStatus s) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		this.s=s;
 	}
 
 	public int getId() {
@@ -84,7 +84,17 @@ public class Student {
 		return password;
 	}
 
+	public StudentStatus getS() {
+		return s;
+	}
+
+	public void setS(StudentStatus s) {
+		this.s = s;
+	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	
 }

@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> searchBooksByTitle(String title) throws NoRecordFoundException, SomethingWentWrongException {
-    	List<Book> k = bookDAO.getAllBooks().stream().filter(p->p.getTitle().equals(title)).toList();
+    	List<Book> k = bookDAO.getAllBooks().stream().filter(p->p.getTitle().contains(title)).toList();
     	if(k.size()==0) {
     		throw new NoRecordFoundException("No Book Available with the title");
     	}
@@ -48,18 +48,18 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> searchBooksByAuthor(String author) throws NoRecordFoundException, SomethingWentWrongException {
-    	List<Book> k = bookDAO.getAllBooks().stream().filter(p->p.getAuthor().equals(author)).toList();
+    	List<Book> k = bookDAO.getAllBooks().stream().filter(p->p.getAuthor().contains(author)).toList();
     	if(k.size()==0) {
-    		throw new  NoRecordFoundException("No Book Available with the title");
+    		throw new  NoRecordFoundException("No Book Available with the author");
     	}
         return k;
     }
 
     @Override
     public List<Book> searchBooksByGenre(String genre) throws NoRecordFoundException, SomethingWentWrongException {
-    	List<Book> k = bookDAO.getAllBooks().stream().filter(p->p.getGenre().equals(genre)).toList();
+    	List<Book> k = bookDAO.getAllBooks().stream().filter(p->p.getGenre().contains(genre)).toList();
     	if(k.size()==0) {
-    		throw new NoRecordFoundException("No Book Available with the title");
+    		throw new NoRecordFoundException("No Book Available with the genre");
     	}
         return k;
     }

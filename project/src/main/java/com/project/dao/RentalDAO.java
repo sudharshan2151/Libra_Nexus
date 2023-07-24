@@ -14,6 +14,9 @@ public interface RentalDAO {
 	    List<Rental> getRentalsByStudentId(int studentId) throws SomethingWentWrongException ;
 	    // You can add additional methods as needed
 		Rental getRentalByStudentAndBook(int studentId, int bookId) throws SomethingWentWrongException;
+		Rental getRentalByBook(int bookId) throws SomethingWentWrongException;
+		void RemoveRental(int id) throws SomethingWentWrongException ;
+		List<Rental> getRentalByBookk( int bookId) throws SomethingWentWrongException;
 	
 
 

@@ -2,11 +2,14 @@ package com.project.dao;
 
 import java.util.List;
 
+import com.project.entity.Book;
 import com.project.entity.Feedback;
+import com.project.exception.NoRecordFoundException;
 import com.project.exception.SomethingWentWrongException;
 import com.project.utility.DbUtil;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
 public class FeedbackDAOImpl implements FeedbackDAO{
@@ -59,7 +62,11 @@ public class FeedbackDAOImpl implements FeedbackDAO{
 	        EntityManager entityManager = DbUtil.getConnection();
 	        try {
 	            TypedQuery<Feedback> query = entityManager.createQuery("SELECT f FROM Feedback f", Feedback.class);
-	            return query.getResultList();
+	            List<Feedback> k = query.getResultList();
+	            if(k==null || k.size()==0) {
+	            	throw new NoRecordFoundException("No feedbacks given");
+	            }
+	            return k;
 	        } catch (Exception ex) {
 	            throw new SomethingWentWrongException("Failed to get all feedbacks."+ ex);
 	        } finally {
@@ -82,6 +89,29 @@ public class FeedbackDAOImpl implements FeedbackDAO{
 	        }
 	    }
 	
+	    @Override
+	    public List<Feedback> getFeedbacksByBook(int book) throws SomethingWentWrongException, NoRecordFoundException {
+	    	EntityManager entityManager = DbUtil.getConnection();
+	    	try {
+	            // Get your EntityManager instance
 
+	            // Use a JPQL query to fetch feedbacks associated with the book
+	           
+	            Query query = entityManager.createQuery("SELECT f FROM Feedback f WHERE f.book_id = :book");
+	            query.setParameter("book", book);
+	            @SuppressWarnings("unchecked")
+				List<Feedback> feedbacks = query.getResultList();
+
+	            if (feedbacks == null || feedbacks.isEmpty()) {
+	                throw new NoRecordFoundException("No feedbacks found for the book.");
+	            }
+
+	            return feedbacks;
+	        } catch (Exception ex) {
+	            throw new SomethingWentWrongException("An error occurred while fetching feedbacks."+ ex);
+	        }finally {
+	        	entityManager.close();
+	        }
+	    }
 
 }

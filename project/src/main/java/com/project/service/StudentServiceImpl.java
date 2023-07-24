@@ -5,6 +5,7 @@ import java.util.List;
 import com.project.dao.StudentDAO;
 import com.project.dao.StudentDAOImpl;
 import com.project.entity.Student;
+import com.project.entity.StudentStatus;
 import com.project.exception.NoRecordFoundException;
 import com.project.exception.SomethingWentWrongException;
 
@@ -51,7 +52,7 @@ public class StudentServiceImpl implements StudentService{
 	public Student loginStudent(String email, String password) throws NoRecordFoundException, SomethingWentWrongException {
 		//List<Student> list = getAllStudents();
 		StudentDAO k1 = new StudentDAOImpl();
-        Student k = k1.getAllStudents().stream().filter(p->p.getEmail().equals(email)&&p.getPassword().equals(password)).findFirst().orElseThrow(()->new NoRecordFoundException("Login Failed=======>Invalid Username Or password"));
+        Student k = k1.getAllStudents().stream().filter(p->p.getEmail().equals(email)&&p.getPassword().equals(password)&&p.getS()==StudentStatus.ACTIVE).findFirst().orElseThrow(()->new NoRecordFoundException("Login Failed=======>Invalid Username Or password"));
 //        if (student != null && student.getPassword().equals(password)) {
 //            return student;
 //        }
