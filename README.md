@@ -3,7 +3,7 @@
 The Library Management System is a software solution designed to efficiently manage the operations of a library. It aims to provide librarians and students with a platform to facilitate book management, rental transactions, feedback collection, and more.
 
 ## Table of Contents:
-- [Description](description)
+- [Description](#description)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Database Schema](#database-schema)
