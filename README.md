@@ -1,4 +1,5 @@
 # Library Management System📚📚
+![Grey Black Minimalist Modern Floral Book Club Logo (1)](https://github.com/sudharshan2151/Libra_Nexus/assets/123924081/6724415d-e420-439c-9e87-849a20f7f237)
 
 The Library Management System is a software solution designed to efficiently manage the operations of a library. It aims to provide librarians and students with a platform to facilitate book management, rental transactions, feedback collection, and more.
 
